@@ -1,0 +1,336 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Community Engagement Bubble Plot (symlog, top20 labels compact)</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body { margin:0; font-family: Arial, Helvetica, sans-serif; background:#f5f7fa; }
+    .outer { display:flex; flex-direction:column; align-items:center; padding:20px; }
+    #chart-wrapper {
+      width: 60vw;
+      max-width: 1200px;
+      height: 70vh;
+      position: relative;
+    }
+    svg { display:block; width:100%; height:100%; }
+    .axis path, .axis line { stroke: #ccc; }
+    .tick text { font-size: 12px; }
+    .legend { display:flex; gap:30px; justify-content:center; padding:12px 0; }
+    .legend-item { display:flex; align-items:center; font-size:14px; gap:6px; }
+    .box { width:14px; height:14px; display:inline-block; }
+    .tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: white;
+      border: 1px solid #bbb;
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      line-height:1.3;
+      max-width: 250px;
+    }
+    .annotation-line { stroke: #c3c3c3; stroke-dasharray: 6 6; stroke-width:2; }
+    .custom-label {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      fill: #000;
+      opacity: 0.9;
+      font-weight: normal;
+      pointer-events: none;
+      text-anchor: middle;
+      dominant-baseline: middle;
+      transition: font-size .2s ease, font-weight .2s ease, opacity .2s ease;
+    }
+
+    .highlighted {
+      font-size: 14px !important;
+      font-weight: bold !important;
+      opacity: 1 !important;
+    }
+    .note {
+      font-size:11px;
+      color:#555;
+      background: rgba(255,255,255,0.85);
+      padding:6px 10px;
+      border-radius:6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-top:6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="outer">
+    <div id="chart-wrapper">
+      <svg id="chart"></svg>
+      <div id="tooltip" class="tooltip" style="display:none;"></div>
+    </div>
+    <div class="legend" aria-label="Legend">
+      <div class="legend-item"><span class="box" style="background:#FFE680;"></span>Research &amp; Academic</div>
+      <div class="legend-item"><span class="box" style="background:#7DA0F2;"></span>Company &amp; Commercial</div>
+      <div class="legend-item"><span class="box" style="background:#5FB896;"></span>Community &amp; Open Source</div>
+    </div>
+    <div class="note">
+      Top 20 labeled. Symlog axes with compressed low end. Labels centered, enlarge on hover. Bubbles sized by followers.
+    </div>
+  </div>
+  <script>
+    const data = [
+{"organization":"unsloth","x":14958.81,"y":14.22,"followers":7140,"id":"unsloth","value":7140},
+{"organization":"allenai","x":5792.75,"y":7.71,"followers":3630,"id":"allenai","value":3630},
+{"organization":"nvidia","x":19819.65,"y":41.36,"followers":32000,"id":"nvidia","value":32000},
+{"organization":"mlx-community","x":603.52,"y":1.66,"followers":6210,"id":"mlx-community","value":6210},
+{"organization":"meta-llama","x":167479.15,"y":745.02,"followers":52900,"id":"meta-llama","value":52900},
+{"organization":"TheBloke","x":14476.32,"y":67.78,"followers":23300,"id":"TheBloke","value":23300},
+{"organization":"facebook","x":12605.3,"y":6.84,"followers":5560,"id":"facebook","value":5560},
+{"organization":"openai","x":321677.33,"y":425.5,"followers":8850,"id":"openai","value":8850},
+{"organization":"microsoft","x":101166.87,"y":91.29,"followers":15600,"id":"microsoft","value":15600},
+{"organization":"Qwen","x":89351.23,"y":127.63,"followers":36200,"id":"Qwen","value":36200},
+{"organization":"google","x":30547.72,"y":27.66,"followers":15400,"id":"google","value":15400},
+{"organization":"stabilityai","x":96147.09,"y":496.45,"followers":29800,"id":"stabilityai","value":29800},
+{"organization":"BAAI","x":39195.57,"y":45.76,"followers":1940,"id":"BAAI","value":1940},
+{"organization":"huggingface","x":1005.59,"y":22.86,"followers":41100,"id":"huggingface","value":41100},
+{"organization":"Intel","x":2098.71,"y":7.34,"followers":3550,"id":"Intel","value":3550},
+{"organization":"amazon","x":279141,"y":48,"followers":4220,"id":"amazon","value":4220},
+{"organization":"albert-lis-group","x":55071.06,"y":18.15,"followers":195,"id":"albert-lis-group","value":195},
+{"organization":"AkshitaKinesso","x":56905.14,"y":18.29,"followers":189,"id":"AkshitaKinesso","value":189},
+{"organization":"black-forest-labs","x":175681.89,"y":1260.89,"followers":20700,"id":"black-forest-labs","value":20700},
+{"organization":"deepseek-ai","x":79593.73,"y":530.74,"followers":2770,"id":"deepseek-ai","value":2770},
+{"organization":"CompVis","x":114019.06,"y":741.06,"followers":1770,"id":"CompVis","value":1770},
+{"organization":"pyannote","x":156336.45,"y":248.45,"followers":1030,"id":"pyannote","value":1030},
+{"organization":"lmstudio-community","x":5937.15,"y":9.85,"followers":2270,"id":"lmstudio-community","value":2270},
+{"organization":"bigcode","x":11745.18,"y":74.45,"followers":1720,"id":"bigcode","value":1720},
+{"organization":"lerobot","x":2540,"y":39.57,"followers":1220,"id":"lerobot","value":1220},
+{"organization":"bigscience","x":3186.24,"y":49.29,"followers":1250,"id":"bigscience","value":1250},
+{"organization":"HuggingFaceH4","x":20609.2,"y":117.2,"followers":1310,"id":"HuggingFaceH4","value":1310},
+{"organization":"ibm-granite","x":34091.24,"y":22.92,"followers":1970,"id":"ibm-granite","value":1970},
+{"organization":"HuggingFaceTB","x":23447.59,"y":43.34,"followers":2040,"id":"HuggingFaceTB","value":2040},
+{"organization":"tiiuae","x":9764.62,"y":124.62,"followers":1740,"id":"tiiuae","value":1740},
+{"organization":"EleutherAI","x":3977.19,"y":6.93,"followers":1060,"id":"EleutherAI","value":1060},
+{"organization":"apple","x":20091.81,"y":46.57,"followers":3830,"id":"apple","value":3830},
+{"organization":"openbmb","x":17502.12,"y":105.25,"followers":1350,"id":"openbmb","value":1350},
+{"organization":"cognitivecomputations","x":1341.19,"y":56.62,"followers":2430,"id":"cognitivecomputations","value":2430},
+{"organization":"jinaai","x":117950.7,"y":113.45,"followers":1100,"id":"jinaai","value":1100},
+{"organization":"amd","x":609.2,"y":3.86,"followers":2020,"id":"amd","value":2020},
+{"organization":"sentence-transformers","x":35896.89,"y":63.36,"followers":2160,"id":"sentence-transformers","value":2160},
+{"organization":"CohereForAI","x":5439.25,"y":427.62,"followers":1780,"id":"CohereForAI","value":1780},
+{"organization":"NousResearch","x":8941.1,"y":88.74,"followers":2220,"id":"NousResearch","value":2220},
+{"organization":"AI-Sweden-Models","x":726.73,"y":3.18,"followers":964,"id":"AI-Sweden-Models","value":964},
+{"organization":"THUDM","x":16907.25,"y":130.65,"followers":2460,"id":"THUDM","value":2460},
+{"organization":"OpenGVLab","x":4264.46,"y":18.45,"followers":996,"id":"OpenGVLab","value":996},
+{"organization":"databricks","x":5645.67,"y":728.5,"followers":1600,"id":"databricks","value":1600},
+{"organization":"01-ai","x":7759.36,"y":154.57,"followers":878,"id":"01-ai","value":878},
+{"organization":"mistralai","x":89252.14,"y":987.86,"followers":10200,"id":"mistralai","value":10200},
+{"organization":"Salesforce","x":33329.26,"y":45.3,"followers":1540,"id":"Salesforce","value":1540},
+{"organization":"XLabs-AI","x":29726.33,"y":232.07,"followers":1610,"id":"XLabs-AI","value":1610},
+{"organization":"Shakker-Labs","x":10755.11,"y":114.37,"followers":931,"id":"Shakker-Labs","value":931},
+{"organization":"briaai","x":62044.5,"y":116.04,"followers":7080,"id":"briaai","value":7080},
+{"organization":"OpenAssistant","x":8419.15,"y":97.08,"followers":1230,"id":"OpenAssistant","value":1230},
+{"organization":"ByteDance","x":25537.05,"y":244.33,"followers":2670,"id":"ByteDance","value":2670},
+{"organization":"GeorgiaTech","x":116.55,"y":0.09,"followers":1880,"id":"GeorgiaTech","value":1880},
+{"organization":"Comfy-Org","x":0.01,"y":189.44,"followers":1850,"id":"Comfy-Org","value":1850},
+{"organization":"tencent","x":76157.5,"y":404.67,"followers":3980,"id":"tencent","value":3980},
+{"organization":"perplexity-ai","x":66444,"y":1163,"followers":2170,"id":"perplexity-ai","value":2170},
+{"organization":"openai-community","x":303175.71,"y":540.29,"followers":1120,"id":"openai-community","value":1120},
+{"organization":"m-a-p","x":1695,"y":11.9,"followers":877,"id":"m-a-p","value":877},
+{"organization":"Kwai-Kolors","x":3998.5,"y":146.5,"followers":1060,"id":"Kwai-Kolors","value":1060},
+{"organization":"stepfun-ai","x":14227.12,"y":357,"followers":1080,"id":"stepfun-ai","value":1080},
+{"organization":"InstantX","x":8945.57,"y":157.36,"followers":916,"id":"InstantX","value":916},
+{"organization":"Lightricks","x":22700.43,"y":171.71,"followers":855,"id":"Lightricks","value":855},
+{"organization":"sd-concepts-library","x":0.09,"y":3.26,"followers":4890,"id":"sd-concepts-library","value":4890},
+{"organization":"sd-dreambooth-library","x":16.34,"y":2.72,"followers":2660,"id":"sd-dreambooth-library","value":2660},
+{"organization":"Wan-AI","x":38888.38,"y":262.88,"followers":2520,"id":"Wan-AI","value":2520},
+{"organization":"sesame","x":83363,"y":1812,"followers":1380,"id":"sesame","value":1380},
+{"organization":"infosys","x":497.5,"y":3,"followers":986,"id":"infosys","value":986},
+{"organization":"genmo","x":22275,"y":1200,"followers":7530,"id":"genmo","value":7530},
+{"organization":"huawei-noah","x":3902.67,"y":2.37,"followers":1070,"id":"huawei-noah","value":1070},
+{"organization":"xai-org","x":557,"y":2292,"followers":1200,"id":"xai-org","value":1200},
+{"organization":"Samsung","x":205,"y":13.5,"followers":870,"id":"Samsung","value":870},
+{"organization":"CognizantAI","x":0.01,"y":0.01,"followers":3410,"id":"CognizantAI","value":3410},
+{"organization":"Etched","x":100,"y":450,"followers":6040,"id":"Etched","value":6040},
+{"organization":"umich","x":6.5,"y":0.01,"followers":1510,"id":"umich","value":1510},
+{"organization":"agents-course","x":0.01,"y":320,"followers":37200,"id":"agents-course","value":37200},
+{"organization":"cisco-ai","x":115.33,"y":3,"followers":1300,"id":"cisco-ai","value":1300},
+{"organization":"open-r1","x":7287,"y":118,"followers":1780,"id":"open-r1","value":1780},
+{"organization":"reasoning-course","x":0.01,"y":0.01,"followers":2890,"id":"reasoning-course","value":2890}
+    ];
+
+    // Category logic
+    const categoryLists = {
+      research: ['allenai','EleutherAI','bigscience','GeorgiaTech','umich','BAAI','OpenGVLab','THUDM','tiiuae','CohereForAI','openbmb','pyannote','m-a-p','agents-course','reasoning-course','open-r1','OpenAssistant','CohereLabs','HuggingFaceTB'],
+      company: ['meta-llama','facebook','google','microsoft','nvidia','amazon','apple','Intel','amd','openai','mistralai','stabilityai','databricks','Salesforce','ByteDance','tencent','deepseek-ai','01-ai','Qwen','Samsung','infosys','cisco-ai','perplexity-ai','xai-org','Etched','genmo','stepfun-ai','Lightricks','briaai','black-forest-labs','ibm-granite','huawei-noah','AI-Sweden-Models','CognizantAI','sesame','Wan-AI','jinaai','MiniMaxAI'],
+      community: ['huggingface','HuggingFaceH4','TheBloke','unsloth','mlx-community','lmstudio-community','sentence-transformers','CompVis','sd-concepts-library','sd-dreambooth-library','lerobot','openai-community','Comfy-Org','Shakker-Labs','XLabs-AI','InstantX','Kwai-Kolors','NousResearch','cognitivecomputations','bigcode']
+    };
+    const colorMap = {
+      research: "#FFE680",
+      company: "#7DA0F2",
+      community: "#5FB896"
+    };
+    function categorize(org) {
+      const lower = org.toLowerCase();
+      for (const [cat, list] of Object.entries(categoryLists)) {
+        if (list.some(o => o.toLowerCase() === lower)) return cat;
+      }
+      if (lower.includes('university') || lower.includes('institute') || lower.includes('academic')) return 'research';
+      if (lower.includes('community') || lower.includes('library')) return 'community';
+      return 'company';
+    }
+
+    // sanitize and annotate
+    data.forEach(d => {
+      if (d.x <= 0) d.x = 0.01;
+      if (d.y <= 0) d.y = 0.01;
+      d.category = categorize(d.organization);
+      d.color = colorMap[d.category];
+    });
+
+    function median(arr) {
+      const sorted = arr.slice().sort((a,b)=>a-b);
+      const mid = Math.floor(sorted.length/2);
+      return (sorted.length %2) ? sorted[mid] : (sorted[mid-1]+sorted[mid])/2;
+    }
+    const medianX = median(data.map(d => d.x));
+    const medianY = median(data.map(d => d.y));
+
+    // sizing
+    const wrapper = document.getElementById("chart-wrapper");
+    const width = wrapper.clientWidth;
+    const height = wrapper.clientHeight;
+    const margin = { top: 30, right: 30, bottom: 70, left: 80 };
+    const innerWidth = width - margin.left - margin.right;
+    const innerHeight = height - margin.top - margin.bottom;
+
+    const svg = d3.select("#chart")
+      .attr("width", width)
+      .attr("height", height);
+
+    // symlog scales
+    const xScale = d3.scaleSymlog()
+      .constant(1000)
+      .domain([0.01, 400000])
+      .range([margin.left, margin.left + innerWidth]);
+
+    const yScale = d3.scaleSymlog()
+      .constant(200)
+      .domain([0.01, 2000])
+      .range([margin.top + innerHeight, margin.top]);
+
+    const sizeScale = d3.scaleSqrt()
+      .domain(d3.extent(data, d => d.followers))
+      .range([5, 50]);
+
+    // ticks & axes
+    const xTicks = [1,10,100,1000,10000,100000,400000];
+    const yTicks = [1,10,100,1000,2000];
+    const formatTick = d => {
+      if (d >= 1e6) return (d / 1e6) + "M";
+      if (d >= 1e3) return (d / 1e3) + "k";
+      if (d >= 1) return d;
+      return d.toPrecision(2);
+    };
+    const xAxis = d3.axisBottom(xScale).tickValues(xTicks).tickFormat(formatTick).tickSizeOuter(0);
+    const yAxis = d3.axisLeft(yScale).tickValues(yTicks).tickFormat(formatTick).tickSizeOuter(0);
+
+    svg.append("g")
+      .attr("transform", `translate(0,${margin.top + innerHeight})`)
+      .call(xAxis)
+      .call(g => g.selectAll("text")
+        .attr("transform", "rotate(-45)")
+        .style("text-anchor", "end"));
+    svg.append("g")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(yAxis);
+
+    // axis labels
+    svg.append("text")
+      .attr("x", margin.left + innerWidth / 2)
+      .attr("y", margin.top + innerHeight + 55)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "16px")
+      .text("Average Downloads per Model");
+    svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("x", - (margin.top + innerHeight / 2))
+      .attr("y", margin.left - 55)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "16px")
+      .text("Average Likes per Model");
+
+    // median lines
+    svg.append("line")
+      .attr("class", "annotation-line")
+      .attr("x1", xScale(medianX))
+      .attr("x2", xScale(medianX))
+      .attr("y1", yScale.range()[0])
+      .attr("y2", yScale.range()[1]);
+    svg.append("line")
+      .attr("class", "annotation-line")
+      .attr("y1", yScale(medianY))
+      .attr("y2", yScale(medianY))
+      .attr("x1", xScale.range()[0])
+      .attr("x2", xScale.range()[1]);
+
+    // tooltip
+    const tooltip = d3.select("#tooltip");
+
+    // draw bubbles
+    const circles = svg.selectAll("circle")
+      .data(data)
+      .join("circle")
+        .attr("cx", d => xScale(d.x))
+        .attr("cy", d => yScale(d.y))
+        .attr("r", d => sizeScale(d.followers))
+        .attr("fill", d => d.color)
+        .attr("opacity", 0.85)
+        .attr("stroke", "#444")
+        .attr("stroke-width", 0.5);
+
+    // top 20 labels
+    const top20 = data.slice().sort((a,b)=>b.followers - a.followers).slice(0,20);
+    const labelG = svg.selectAll(".label-group")
+      .data(top20)
+      .enter()
+      .append("g")
+        .attr("class", "label-group")
+        .attr("transform", d => `translate(${xScale(d.x)},${yScale(d.y)})`);
+
+    labelG.append("text")
+      .attr("class", "custom-label custom-label-back")
+      .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
+      .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px");
+
+    labelG.append("text")
+      .attr("class", "custom-label")
+      .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
+      .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px");
+
+    // interaction
+    circles
+      .on("mouseover", (event, d) => {
+        tooltip.html(`
+          <div><strong>${d.organization}</strong></div>
+          <div>Category: ${d.category.charAt(0).toUpperCase() + d.category.slice(1)}</div>
+          <div>Followers: ${d.followers.toLocaleString()}</div>
+          <div>Avg Downloads/Model: ${d.x.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
+          <div>Avg Likes/Model: ${d.y.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
+        `)
+          .style("left", (event.pageX + 12) + "px")
+          .style("top", (event.pageY + 12) + "px")
+          .style("display", "block");
+
+        labelG.selectAll("text").classed("highlighted", d2 => d2.id === d.id);
+      })
+      .on("mousemove", (event) => {
+        tooltip
+          .style("left", (event.pageX + 12) + "px")
+          .style("top", (event.pageY + 12) + "px");
+      })
+      .on("mouseout", () => {
+        tooltip.style("display", "none");
+        labelG.selectAll("text").classed("highlighted", false);
+      });
+
+  </script>
+</body>
+</html>
