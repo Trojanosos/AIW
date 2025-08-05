@@ -230,7 +230,7 @@
 
     const sizeScale = d3.scaleSqrt()
       .domain(d3.extent(data, d => d.followers))
-      .range([3, 30]);
+      .range([3, 10]);
 
     // Color intensity based on followers
     const opacityScale = d3.scaleLinear()
