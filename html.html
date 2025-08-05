@@ -37,18 +37,29 @@
       font-family:"Helvetica","Arial",sans-serif;
       font-size: 10px;
       fill: #000;
-      opacity: 0.9;
+      opacity: 1;
       font-weight: normal;
+      transition: opacity 0.4s ease, font-size 0.4s ease, font-weight 0.4s ease;
       pointer-events: none;
-      text-anchor: middle;
-      dominant-baseline: middle;
-      transition: font-size .2s ease, font-weight .2s ease, opacity .2s ease;
+      transform-origin: center;
     }
 
-    .highlighted {
-      font-size: 14px !important;
-      font-weight: bold !important;
+    .custom-label.collision {
+      opacity: 0.3;
+    }
+
+    .custom-label.hover {
       opacity: 1 !important;
+      font-size: 16px !important;
+      font-weight: bold !important;
+    }
+
+    .custom-label, text.custom-label {
+      font-family:"Helvetica","Arial",sans-serif !important;
+      font-size: 10px !important;
+      fill: #000 !important;
+      stroke: none !important;
+      font-weight: normal !important;
     }
     .note {
       font-size:11px;
@@ -69,8 +80,11 @@
       <div id="tooltip" class="tooltip" style="display:none;"></div>
     </div>
     <div class="legend" aria-label="Legend">
-      <div class="legend-item"><span class="box" style="background:#2d7c2d;"></span>Research &amp; Open Source</div>
+      <div class="legend-item"><span class="box" style="background:#2d7c2d;"></span>Research &amp; Academic / Community &amp; Open Source</div>
       <div class="legend-item"><span class="box" style="background:#8B1A0F;"></span>Company &amp; Commercial</div>
+    </div>
+    <div class="note">
+      Top 20 labeled. Symlog axes with compressed low end. Labels centered, enlarge on hover. Bubbles sized by followers.
     </div>
   </div>
   <script>
@@ -211,12 +225,12 @@
 
     const yScale = d3.scaleSymlog()
       .constant(200)
-      .domain([0.01, 3000])
+      .domain([0.01, 2000])
       .range([margin.top + innerHeight, margin.top]);
 
     const sizeScale = d3.scaleSqrt()
       .domain(d3.extent(data, d => d.followers))
-      .range([5, 50]);
+      .range([3, 30]);
 
     // Color intensity based on followers
     const opacityScale = d3.scaleLinear()
@@ -225,7 +239,7 @@
 
     // ticks & axes
     const xTicks = [1,10,100,1000,10000,100000,400000];
-    const yTicks = [1,10,100,1000,2000, 3000];
+    const yTicks = [1,10,100,1000,2000];
     const formatTick = d => {
       if (d >= 1e6) return (d / 1e6) + "M";
       if (d >= 1e3) return (d / 1e3) + "k";
@@ -302,13 +316,13 @@
 
     labelG.append("text")
       .attr("class", "custom-label custom-label-back")
-      .text(d => d.organization)
+      .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
       .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
       .attr("font-family", "Helvetica, Arial, sans-serif");
 
     labelG.append("text")
       .attr("class", "custom-label")
-      .text(d => (d.organization))
+      .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
       .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
       .attr("font-family", "Helvetica, Arial, sans-serif");
 
@@ -325,8 +339,6 @@
           .style("left", (event.pageX + 12) + "px")
           .style("top", (event.pageY + 12) + "px")
           .style("display", "block");
-
-        labelG.selectAll("text").classed("highlighted", d2 => d2.id === d.id);
       })
       .on("mousemove", (event) => {
         tooltip
@@ -335,8 +347,148 @@
       })
       .on("mouseout", () => {
         tooltip.style("display", "none");
-        labelG.selectAll("text").classed("highlighted", false);
       });
+
+    function initializeCustomLabels() {
+      const circles = svg.selectAll('circle').nodes();
+      console.log('Found circles:', circles.length);
+      
+      circles.forEach((circle, index) => {
+        const matchingData = findMatchingDataPoint(circle);
+        
+        if (matchingData && top20.some(t => t.id === matchingData.id)) {
+          console.log('Circle', index, 'matched to data:', matchingData.id);
+          
+          const fullText = matchingData.organization;
+          
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          text.setAttribute('class', 'custom-label');
+          text.setAttribute('data-id', matchingData.id);
+          text.setAttribute('text-anchor', 'start');
+          text.setAttribute('font-family', 'Helvetica, Arial, sans-serif');
+          text.setAttribute('font-size', '10');
+          text.setAttribute('fill', '#000');
+          text.setAttribute('font-weight', 'normal');
+          text.textContent = fullText;
+          
+          svg.node().appendChild(text);
+          
+          customLabels.push({
+            circle: circle,
+            text: text,
+            data: matchingData,
+            fullText: fullText,
+            defaultText: fullText,
+            savedPosition: null
+          });
+          
+          circle.addEventListener('mouseenter', () => {
+            hoveringElements.add(text);
+            
+            const labelData = customLabels.find(l => l.circle === circle);
+            if (labelData) {
+              labelData.savedPosition = {
+                x: text.getAttribute('x'),
+                y: text.getAttribute('y'),
+                anchor: text.getAttribute('text-anchor'),
+                content: text.textContent
+              };
+            }
+            
+            text.classList.add('hover');
+            text.textContent = fullText;
+          });
+          
+          circle.addEventListener('mouseleave', () => {
+            hoveringElements.delete(text);
+            
+            text.classList.remove('hover');
+            
+            const labelData = customLabels.find(l => l.circle === circle);
+            if (labelData && labelData.savedPosition) {
+              text.setAttribute('x', labelData.savedPosition.x);
+              text.setAttribute('y', labelData.savedPosition.y);
+              text.setAttribute('text-anchor', labelData.savedPosition.anchor);
+              text.textContent = labelData.savedPosition.content;
+            }
+          });
+        }
+      });
+      
+      updateLabelPositions();
+    }
+
+    function updateLabelPositions() {
+      if (isUpdating) return;
+      isUpdating = true;
+      
+      const circlePositions = [];
+      
+      customLabels.forEach(({circle, text}) => {
+        if (circle && text) {
+          const cx = parseFloat(circle.getAttribute('cx'));
+          const cy = parseFloat(circle.getAttribute('cy'));
+          
+          circlePositions.push({
+            circle: circle,
+            coords: { x: cx, y: cy }
+          });
+        }
+      });
+      
+      customLabels.forEach((labelData) => {
+        const {circle, text, fullText} = labelData;
+        
+        if (hoveringElements.has(text)) {
+          return;
+        }
+        
+        if (circle && text) {
+          const circleData = circlePositions.find(cp => cp.circle === circle);
+          if (circleData) {
+            const r = parseFloat(circle.getAttribute('r')) || 7.5;
+            const bestPosition = findBestPosition(
+              text, 
+              circleData.coords.x, 
+              circleData.coords.y, 
+              r,
+              circlePositions,
+              fullText
+            );
+            
+            text.setAttribute('x', bestPosition.x);
+            text.setAttribute('y', bestPosition.y);
+            text.setAttribute('text-anchor', bestPosition.anchor);
+            text.textContent = bestPosition.text;
+            labelData.defaultText = bestPosition.text;
+            
+            if (bestPosition.hasCollision) {
+              text.classList.add('collision');
+              text.setAttribute('opacity', '0.3');
+            } else {
+              text.classList.remove('collision');
+              text.setAttribute('opacity', '1');
+            }
+          }
+        }
+      });
+      
+      isUpdating = false;
+    }
+
+    function startPositionUpdater() {
+      function updateLoop() {
+        updateLabelPositions();
+        requestAnimationFrame(updateLoop);
+      }
+      
+      updateLoop();
+    }
+
+    setTimeout(() => {
+      initializeCustomLabels();
+      startPositionUpdater();
+    }, 500);
 
   </script>
 </body>
