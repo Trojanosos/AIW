@@ -222,7 +222,7 @@
 
     const yScale = d3.scaleSymlog()
       .constant(200)
-      .domain([0.01, 2000])
+      .domain([0.01, 3000])
       .range([margin.top + innerHeight, margin.top]);
 
     const sizeScale = d3.scaleSqrt()
@@ -236,7 +236,7 @@
 
     // ticks & axes
     const xTicks = [1,10,100,1000,10000,100000,400000];
-    const yTicks = [1,10,100,1000,2000];
+    const yTicks = [1,10,100,1000,2000, 3000];
     const formatTick = d => {
       if (d >= 1e6) return (d / 1e6) + "M";
       if (d >= 1e3) return (d / 1e3) + "k";
