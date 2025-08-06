@@ -326,28 +326,29 @@
       .attr("fill", "#000")
       .attr("opacity", 0.8);
     // interaction
-    circles
-      .on("mouseover", (event, d) => {
-        tooltip.html(`
-          <div><strong>${d.organization}</strong></div>
-          <div>Category: ${d.category.charAt(0).toUpperCase() + d.category.slice(1)}</div>
-          <div>Followers: ${d.followers.toLocaleString()}</div>
-          <div>Avg Downloads/Model: ${d.x.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
-          <div>Avg Likes/Model: ${d.y.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
-        `)
-          .style("left", (event.clientX + 12) + "px")
-          .style("top", (event.clientY + 12) + "px")
-          .style("display", "block");
-      })
-      .on("mousemove", (event) => {
-        tooltip
-          .style("left", (event.clientX + 12) + "px")
-          .style("top", (event.clientY + 12) + "px");
-      })
-      .on("mouseout", () => {
-        tooltip.style("display", "none");
-      });
-
+    // interaction - SIMPLE SOLUTION
+  circles
+    .on("mouseover", (event, d) => {
+      tooltip.html(`
+        <div><strong>${d.organization}</strong></div>
+        <div>Category: ${d.category.charAt(0).toUpperCase() + d.category.slice(1)}</div>
+        <div>Followers: ${d.followers.toLocaleString()}</div>
+        <div>Avg Downloads/Model: ${d.x.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
+        <div>Avg Likes/Model: ${d.y.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
+      `)
+        .style("left", (event.pageX + 12) + "px")
+        .style("top", (event.pageY + 12) + "px")
+        .style("display", "block")
+        .style("position", "absolute");
+    })
+    .on("mousemove", (event) => {
+      tooltip
+        .style("left", (event.pageX + 12) + "px")
+        .style("top", (event.pageY + 12) + "px");
+    })
+    .on("mouseout", () => {
+      tooltip.style("display", "none");
+    });
   </script>
 </body>
 </html>
