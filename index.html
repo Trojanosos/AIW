@@ -311,18 +311,18 @@
         .attr("class", "label-group")
         .attr("transform", d => `translate(${xScale(d.x)},${yScale(d.y)})`);
 
-    labelG.append("text")
-      .attr("class", "custom-label custom-label-back")
-      .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
-      .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
-      .attr("font-family", "Helvetica, Arial, sans-serif");
 
     labelG.append("text")
       .attr("class", "custom-label")
       .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
+      .attr("x", d => sizeScale(d.followers) + 5)
+      .attr("y", 0)
+      .attr("dy", "0.35em")
+      .attr("text-anchor", "start")
       .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
-      .attr("font-family", "Helvetica, Arial, sans-serif");
-
+      .attr("font-family", "Helvetica, Arial, sans-serif")
+      .attr("fill", "#000")
+      .attr("opacity", 0.8);
     // interaction
     circles
       .on("mouseover", (event, d) => {
