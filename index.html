@@ -10,7 +10,9 @@
     #chart-wrapper {
       width: 60vw;
       max-width: 1200px;
+      min-width: 800px;  /* Add minimum width */
       height: 70vh;
+      min-height: 600px; /* Add minimum height */
       position: relative;
     }
     svg { display:block; width:100%; height:100%; }
@@ -222,11 +224,11 @@
     }
     const medianX = median(data.map(d => d.x));
     const medianY = median(data.map(d => d.y));
-    // sizing
+    // sizing with better handling for different environments
     const wrapper = document.getElementById("chart-wrapper");
-    const width = wrapper.clientWidth;
-    const height = wrapper.clientHeight;
-    const margin = { top: 30, right: 120, bottom: 70, left: 80 };
+    const width = Math.max(wrapper.clientWidth, 800); // Minimum width
+    const height = Math.max(wrapper.clientHeight, 600); // Minimum height
+    const margin = { top: 30, right: 150, bottom: 70, left: 80 }; // Even more right margin
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const svg = d3.select("#chart")
@@ -324,15 +326,21 @@
         .attr("class", "label-group")
         .attr("transform", d => `translate(${xScale(d.x)},${yScale(d.y)})`);
     
-    // Simple labels positioned to the right of each bubble with more space
+    // Labels with better truncation logic for long names
     labelG.append("text")
       .attr("class", "custom-label")
-      .text(d => d.organization) // Show full name since we have more space
-      .attr("x", d => sizeScale(d.followers) + 5) // Position to the right of bubble
+      .text(d => {
+        // More conservative truncation for GitHub hosting
+        if (d.organization.length > 15) {
+          return d.organization.slice(0,12) + "…";
+        }
+        return d.organization;
+      })
+      .attr("x", d => sizeScale(d.followers) + 8) // Slightly more offset
       .attr("y", 0)
-      .attr("dy", "0.35em") // Center vertically
+      .attr("dy", "0.35em")
       .attr("text-anchor", "start")
-      .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
+      .attr("font-size", "11px") // Fixed size for consistency
       .attr("font-family", "Helvetica, Arial, sans-serif")
       .attr("fill", "#000")
       .attr("opacity", 0.8);
