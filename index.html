@@ -324,14 +324,34 @@
         .attr("class", "label-group")
         .attr("transform", d => `translate(${xScale(d.x)},${yScale(d.y)})`);
     
-    // Simple labels positioned to the right of each bubble
+    // Smart labels positioned to avoid cutoff
     labelG.append("text")
       .attr("class", "custom-label")
       .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
-      .attr("x", d => sizeScale(d.followers) + 5) // Position to the right of bubble
+      .attr("x", d => {
+        const bubbleX = xScale(d.x);
+        const bubbleRadius = sizeScale(d.followers);
+        const labelWidth = 80; // Approximate label width
+        const rightEdge = margin.left + innerWidth;
+        
+        // If label would extend beyond right edge, position it to the left
+        if (bubbleX + bubbleRadius + 5 + labelWidth > rightEdge) {
+          return -(bubbleRadius + 5); // Position to the left of bubble
+        } else {
+          return bubbleRadius + 5; // Position to the right of bubble
+        }
+      })
       .attr("y", 0)
       .attr("dy", "0.35em") // Center vertically
-      .attr("text-anchor", "start")
+      .attr("text-anchor", d => {
+        const bubbleX = xScale(d.x);
+        const bubbleRadius = sizeScale(d.followers);
+        const labelWidth = 80;
+        const rightEdge = margin.left + innerWidth;
+        
+        // If positioned to the left, use "end" anchor, otherwise "start"
+        return (bubbleX + bubbleRadius + 5 + labelWidth > rightEdge) ? "end" : "start";
+      })
       .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
       .attr("font-family", "Helvetica, Arial, sans-serif")
       .attr("fill", "#000")
