@@ -19,8 +19,10 @@
     .legend { display:flex; gap:30px; justify-content:center; padding:12px 0; }
     .legend-item { display:flex; align-items:center; font-size:14px; gap:6px; font-family:"Helvetica","Arial",sans-serif; }
     .box { width:14px; height:14px; display:inline-block; }
+    
+    /* Updated tooltip styles for cursor following */
     .tooltip {
-      position: fixed;
+      position: absolute;
       pointer-events: none;
       background: white;
       border: 1px solid #bbb;
@@ -31,8 +33,10 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       line-height:1.3;
       max-width: 250px;
-      z-index: 9999;
+      z-index: 1000;
+      display: none; /* Start hidden */
     }
+    
     .annotation-line { stroke: #c3c3c3; stroke-dasharray: 6 6; stroke-width:2; }
     .custom-label {
       font-family:"Helvetica","Arial",sans-serif;
@@ -44,17 +48,14 @@
       pointer-events: none;
       transform-origin: center;
     }
-
     .custom-label.collision {
       opacity: 0.3;
     }
-
     .custom-label.hover {
       opacity: 1 !important;
       font-size: 16px !important;
       font-weight: bold !important;
     }
-
     .custom-label, text.custom-label {
       font-family:"Helvetica","Arial",sans-serif !important;
       font-size: 10px !important;
@@ -72,17 +73,29 @@
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       margin-top:6px;
     }
+    
+    /* Remove default browser tooltips */
+    circle {
+      cursor: pointer;
+    }
+    
+    /* Prevent text selection on hover */
+    svg {
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
   </style>
 </head>
 <body>
   <div class="outer">
     <div id="chart-wrapper">
       <svg id="chart"></svg>
-      </div>
-      <div id="tooltip" class="tooltip" style="display:none;"></div>
+      <div id="tooltip" class="tooltip"></div>
     </div>
     <div class="legend" aria-label="Legend">
-      <div class="legend-item"><span class="box" style="background:#2d7c2d;"></span>Research &amp; Open Source</div>
+      <div class="legend-item"><span class="box" style="background:#2d7c2d;"></span>Research &amp; Academic / Community &amp; Open Source</div>
       <div class="legend-item"><span class="box" style="background:#8B1A0F;"></span>Company &amp; Commercial</div>
     </div>
   </div>
@@ -166,7 +179,15 @@
 {"organization":"open-r1","x":7287,"y":118,"followers":1780,"id":"open-r1","value":1780},
 {"organization":"reasoning-course","x":0.01,"y":0.01,"followers":2890,"id":"reasoning-course","value":2890}
     ];
-
+    
+    // Remove any title attributes to prevent default browser tooltips
+    document.addEventListener('DOMContentLoaded', () => {
+      const elementsWithTitle = document.querySelectorAll('[title]');
+      elementsWithTitle.forEach(el => {
+        el.removeAttribute('title');
+      });
+    });
+    
     // Category logic
     const categoryLists = {
       research: ['allenai','EleutherAI','bigscience','GeorgiaTech','umich','BAAI','OpenGVLab','THUDM','tiiuae','CohereForAI','openbmb','pyannote','m-a-p','agents-course','reasoning-course','open-r1','OpenAssistant','CohereLabs','HuggingFaceTB'],
@@ -187,7 +208,6 @@
       if (lower.includes('community') || lower.includes('library')) return 'community';
       return 'company';
     }
-
     // sanitize and annotate
     data.forEach(d => {
       if (d.x <= 0) d.x = 0.01;
@@ -195,7 +215,6 @@
       d.category = categorize(d.organization);
       d.color = colorMap[d.category];
     });
-
     function median(arr) {
       const sorted = arr.slice().sort((a,b)=>a-b);
       const mid = Math.floor(sorted.length/2);
@@ -203,7 +222,6 @@
     }
     const medianX = median(data.map(d => d.x));
     const medianY = median(data.map(d => d.y));
-
     // sizing
     const wrapper = document.getElementById("chart-wrapper");
     const width = wrapper.clientWidth;
@@ -211,34 +229,28 @@
     const margin = { top: 30, right: 30, bottom: 70, left: 80 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
-
     const svg = d3.select("#chart")
       .attr("width", width)
       .attr("height", height);
-
     // symlog scales
     const xScale = d3.scaleSymlog()
       .constant(1000)
       .domain([0.01, 400000])
       .range([margin.left, margin.left + innerWidth]);
-
     const yScale = d3.scaleSymlog()
       .constant(200)
-      .domain([0.01, 3000])
+      .domain([0.01, 2000])
       .range([margin.top + innerHeight, margin.top]);
-
     const sizeScale = d3.scaleSqrt()
       .domain(d3.extent(data, d => d.followers))
       .range([3, 10]);
-
     // Color intensity based on followers
     const opacityScale = d3.scaleLinear()
       .domain(d3.extent(data, d => d.followers))
       .range([0.3, 1.0]);
-
     // ticks & axes
     const xTicks = [1,10,100,1000,10000,100000,400000];
-    const yTicks = [1,10,100,1000,2000,3000];
+    const yTicks = [1,10,100,1000,2000];
     const formatTick = d => {
       if (d >= 1e6) return (d / 1e6) + "M";
       if (d >= 1e3) return (d / 1e3) + "k";
@@ -247,7 +259,6 @@
     };
     const xAxis = d3.axisBottom(xScale).tickValues(xTicks).tickFormat(formatTick).tickSizeOuter(0);
     const yAxis = d3.axisLeft(yScale).tickValues(yTicks).tickFormat(formatTick).tickSizeOuter(0);
-
     svg.append("g")
       .attr("transform", `translate(0,${margin.top + innerHeight})`)
       .call(xAxis)
@@ -257,7 +268,6 @@
     svg.append("g")
       .attr("transform", `translate(${margin.left},0)`)
       .call(yAxis);
-
     // axis labels
     svg.append("text")
       .attr("x", margin.left + innerWidth / 2)
@@ -274,7 +284,6 @@
       .attr("font-size", "16px")
       .attr("font-family", "Helvetica, Arial, sans-serif")
       .text("Average Likes per Model");
-
     // median lines
     svg.append("line")
       .attr("class", "annotation-line")
@@ -288,10 +297,9 @@
       .attr("y2", yScale(medianY))
       .attr("x1", xScale.range()[0])
       .attr("x2", xScale.range()[1]);
-
     // tooltip
     const tooltip = d3.select("#tooltip");
-
+    
     // draw bubbles
     const circles = svg.selectAll("circle")
       .data(data)
@@ -303,8 +311,11 @@
         .attr("opacity", d => opacityScale(d.followers))
         .attr("stroke", "#444")
         .attr("stroke-width", 0.5);
-
-    // top 20 labels
+    
+    // Remove any title attributes from circles to prevent default tooltips
+    circles.attr("title", null);
+    
+    // top 20 labels - SIMPLIFIED WITHOUT OVERLAP DETECTION
     const top20 = data.slice().sort((a,b)=>b.followers - a.followers).slice(0,20);
     const labelG = svg.selectAll(".label-group")
       .data(top20)
@@ -312,43 +323,44 @@
       .append("g")
         .attr("class", "label-group")
         .attr("transform", d => `translate(${xScale(d.x)},${yScale(d.y)})`);
-
-
+    
+    // Simple labels positioned to the right of each bubble
     labelG.append("text")
       .attr("class", "custom-label")
       .text(d => (d.organization.length > 12 ? d.organization.slice(0,10)+"…" : d.organization))
-      .attr("x", d => sizeScale(d.followers) + 5)
+      .attr("x", d => sizeScale(d.followers) + 5) // Position to the right of bubble
       .attr("y", 0)
-      .attr("dy", "0.35em")
+      .attr("dy", "0.35em") // Center vertically
       .attr("text-anchor", "start")
       .attr("font-size", d => Math.min(12, Math.max(9, sizeScale(d.followers)*0.4)) + "px")
       .attr("font-family", "Helvetica, Arial, sans-serif")
       .attr("fill", "#000")
       .attr("opacity", 0.8);
-    // interaction
-    // interaction - SIMPLE SOLUTION
-  circles
-    .on("mouseover", (event, d) => {
-      tooltip.html(`
-        <div><strong>${d.organization}</strong></div>
-        <div>Category: ${d.category.charAt(0).toUpperCase() + d.category.slice(1)}</div>
-        <div>Followers: ${d.followers.toLocaleString()}</div>
-        <div>Avg Downloads/Model: ${d.x.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
-        <div>Avg Likes/Model: ${d.y.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
-      `)
-        .style("left", (event.pageX + 12) + "px")
-        .style("top", (event.pageY + 12) + "px")
-        .style("display", "block")
-        .style("position", "absolute");
-    })
-    .on("mousemove", (event) => {
-      tooltip
-        .style("left", (event.pageX + 12) + "px")
-        .style("top", (event.pageY + 12) + "px");
-    })
-    .on("mouseout", () => {
-      tooltip.style("display", "none");
-    });
+    
+    // Updated interaction with cursor-following tooltip
+    circles
+      .on("mouseover", (event, d) => {
+        const rect = wrapper.getBoundingClientRect();
+        tooltip.html(`
+          <div><strong>${d.organization}</strong></div>
+          <div>Category: ${d.category.charAt(0).toUpperCase() + d.category.slice(1)}</div>
+          <div>Followers: ${d.followers.toLocaleString()}</div>
+          <div>Avg Downloads/Model: ${d.x.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
+          <div>Avg Likes/Model: ${d.y.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
+        `)
+          .style("left", (event.clientX - rect.left + 12) + "px")
+          .style("top", (event.clientY - rect.top + 12) + "px")
+          .style("display", "block");
+      })
+      .on("mousemove", (event) => {
+        const rect = wrapper.getBoundingClientRect();
+        tooltip
+          .style("left", (event.clientX - rect.left + 12) + "px")
+          .style("top", (event.clientY - rect.top + 12) + "px");
+      })
+      .on("mouseout", () => {
+        tooltip.style("display", "none");
+      });
   </script>
 </body>
 </html>
