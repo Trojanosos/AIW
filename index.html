@@ -333,8 +333,8 @@
           <div>Avg Downloads/Model: ${d.x.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
           <div>Avg Likes/Model: ${d.y.toLocaleString(undefined,{maximumFractionDigits:1})}</div>
         `)
-          .style("left", (event.pageX + 12) + "px")
-          .style("top", (event.pageY + 12) + "px")
+          .style("left", (event.clientX + 12) + "px")
+          .style("top", (event.clientY + 12) + "px")
           .style("display", "block");
       })
       .on("mousemove", (event) => {
@@ -345,147 +345,6 @@
       .on("mouseout", () => {
         tooltip.style("display", "none");
       });
-
-    function initializeCustomLabels() {
-      const circles = svg.selectAll('circle').nodes();
-      console.log('Found circles:', circles.length);
-      
-      circles.forEach((circle, index) => {
-        const matchingData = findMatchingDataPoint(circle);
-        
-        if (matchingData && top20.some(t => t.id === matchingData.id)) {
-          console.log('Circle', index, 'matched to data:', matchingData.id);
-          
-          const fullText = matchingData.organization;
-          
-          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-          text.setAttribute('class', 'custom-label');
-          text.setAttribute('data-id', matchingData.id);
-          text.setAttribute('text-anchor', 'start');
-          text.setAttribute('font-family', 'Helvetica, Arial, sans-serif');
-          text.setAttribute('font-size', '10');
-          text.setAttribute('fill', '#000');
-          text.setAttribute('font-weight', 'normal');
-          text.textContent = fullText;
-          
-          svg.node().appendChild(text);
-          
-          customLabels.push({
-            circle: circle,
-            text: text,
-            data: matchingData,
-            fullText: fullText,
-            defaultText: fullText,
-            savedPosition: null
-          });
-          
-          circle.addEventListener('mouseenter', () => {
-            hoveringElements.add(text);
-            
-            const labelData = customLabels.find(l => l.circle === circle);
-            if (labelData) {
-              labelData.savedPosition = {
-                x: text.getAttribute('x'),
-                y: text.getAttribute('y'),
-                anchor: text.getAttribute('text-anchor'),
-                content: text.textContent
-              };
-            }
-            
-            text.classList.add('hover');
-            text.textContent = fullText;
-          });
-          
-          circle.addEventListener('mouseleave', () => {
-            hoveringElements.delete(text);
-            
-            text.classList.remove('hover');
-            
-            const labelData = customLabels.find(l => l.circle === circle);
-            if (labelData && labelData.savedPosition) {
-              text.setAttribute('x', labelData.savedPosition.x);
-              text.setAttribute('y', labelData.savedPosition.y);
-              text.setAttribute('text-anchor', labelData.savedPosition.anchor);
-              text.textContent = labelData.savedPosition.content;
-            }
-          });
-        }
-      });
-      
-      updateLabelPositions();
-    }
-
-    function updateLabelPositions() {
-      if (isUpdating) return;
-      isUpdating = true;
-      
-      const circlePositions = [];
-      
-      customLabels.forEach(({circle, text}) => {
-        if (circle && text) {
-          const cx = parseFloat(circle.getAttribute('cx'));
-          const cy = parseFloat(circle.getAttribute('cy'));
-          
-          circlePositions.push({
-            circle: circle,
-            coords: { x: cx, y: cy }
-          });
-        }
-      });
-      
-      customLabels.forEach((labelData) => {
-        const {circle, text, fullText} = labelData;
-        
-        if (hoveringElements.has(text)) {
-          return;
-        }
-        
-        if (circle && text) {
-          const circleData = circlePositions.find(cp => cp.circle === circle);
-          if (circleData) {
-            const r = parseFloat(circle.getAttribute('r')) || 7.5;
-            const bestPosition = findBestPosition(
-              text, 
-              circleData.coords.x, 
-              circleData.coords.y, 
-              r,
-              circlePositions,
-              fullText
-            );
-            
-            text.setAttribute('x', bestPosition.x);
-            text.setAttribute('y', bestPosition.y);
-            text.setAttribute('text-anchor', bestPosition.anchor);
-            text.textContent = bestPosition.text;
-            labelData.defaultText = bestPosition.text;
-            
-            if (bestPosition.hasCollision) {
-              text.classList.add('collision');
-              text.setAttribute('opacity', '0.3');
-            } else {
-              text.classList.remove('collision');
-              text.setAttribute('opacity', '1');
-            }
-          }
-        }
-      });
-      
-      isUpdating = false;
-    }
-
-    function startPositionUpdater() {
-      function updateLoop() {
-        updateLabelPositions();
-        requestAnimationFrame(updateLoop);
-      }
-      
-      updateLoop();
-    }
-
-    setTimeout(() => {
-      initializeCustomLabels();
-      startPositionUpdater();
-    }, 500);
 
   </script>
 </body>
