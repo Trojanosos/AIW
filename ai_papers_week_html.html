@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #f0f2f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #1a365d;
+            background: white;
+            padding: 2px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .paper-card {
+            background: white;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .paper-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .paper-type {
+            background: #EDF2F7;
+            padding: 3px 6px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #4A5568;
+            white-space: nowrap;
+        }
+        .title {
+            color: #2d3748;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            flex: 1;
+        }
+        .title:hover {
+            color: #4299e1;
+        }
+        .description {
+            margin-top: 4px;
+            color: #4a5568;
+            line-height: 1.4;
+            font-size: 1.05em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer a {
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI World's 10 Notable Research Papers <br>#Week36</h1>
+    </div>
+
+    <!-- Paper 1 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-search"></i> Deep Research</span>
+            <a href="https://arxiv.org/html/2509.00375v1" class="title" target="_blank">
+                Open Data Synthesis For Deep Research
+            </a>
+        </div>
+        <div class="description">
+            InfoSeek framework for synthesizing complex research tasks using hierarchical constraint satisfaction problems.
+        </div>
+    </div>
+
+    <!-- Paper 2 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-memory"></i> Agent Memory</span>
+            <a href="https://arxiv.org/abs/2508.06433" class="title" target="_blank">
+                Memp: Exploring Agent Procedural Memory
+            </a>
+        </div>
+        <div class="description">
+            Learnable procedural memory system for AI agents that evolves through experience and improves task performance.
+        </div>
+    </div>
+
+    <!-- Paper 3 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-shield-alt"></i> Research Integrity</span>
+            <a href="https://www.science.org/doi/10.1126/sciadv.adt2792" class="title" target="_blank">
+                Estimating the predictability of questionable open-access journals
+            </a>
+        </div>
+        <div class="description">
+            AI-powered system for identifying questionable academic journals through automated analysis of publication patterns.
+        </div>
+    </div>
+
+    <!-- Paper 4 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-briefcase"></i> Labor Economics</span>
+            <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5425555" class="title" target="_blank">
+                Generative AI as Seniority-Biased Technological Change
+            </a>
+        </div>
+        <div class="description">
+            Analysis of 62M workers showing AI adoption disproportionately affects junior workers in U.S. firms.
+        </div>
+    </div>
+
+    <!-- Paper 5 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-chart-line"></i> Employment Impact</span>
+            <a href="https://digitaleconomy.stanford.edu/wp-content/uploads/2025/08/Canaries_BrynjolfssonChandarChen.pdf" class="title" target="_blank">
+                Canaries in the Coal Mine? Six Facts about AI's Employment Effects
+            </a>
+        </div>
+        <div class="description">
+            Stanford study reveals 13% employment decline for early-career workers in AI-exposed occupations.
+        </div>
+    </div>
+
+    <!-- Paper 6 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-car"></i> Autonomous Driving</span>
+            <a href="https://arxiv.org/abs/2509.03515v1" class="title" target="_blank">
+                Can the Waymo Open Motion Dataset Support Realistic Behavioral Modeling?
+            </a>
+        </div>
+        <div class="description">
+            Validation study comparing Waymo dataset with naturalistic driving data reveals behavioral modeling limitations.
+        </div>
+    </div>
+
+    <!-- Paper 7 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-dna"></i> Protein AI</span>
+            <a href="https://arxiv.org/html/2509.03487v1" class="title" target="_blank">
+                SafeProtein: Red-Teaming Framework and Benchmark for Protein Foundation Models
+            </a>
+        </div>
+        <div class="description">
+            Safety framework for evaluating potential risks and misuse of protein foundation models in biotechnology.
+        </div>
+    </div>
+
+    <!-- Paper 8 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-robot"></i> Robotics Safety</span>
+            <a href="https://arxiv.org/abs/2509.03517v1" class="title" target="_blank">
+                ANNIE: Be Careful of Your Robots
+            </a>
+        </div>
+        <div class="description">
+            Vision-language-action model safety framework addressing risks in embodied AI and robotic systems.
+        </div>
+    </div>
+
+    <!-- Paper 9 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-user-shield"></i> Privacy</span>
+            <a href="https://www.arxiv.org/abs/2509.03294" class="title" target="_blank">
+                A Comprehensive Guide to Differential Privacy: From Theory to User Expectations
+            </a>
+        </div>
+        <div class="description">
+            Complete framework bridging theoretical differential privacy concepts with practical user privacy expectations.
+        </div>
+    </div>
+
+    <!-- Paper 10 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-exclamation-triangle"></i> Disaster Management</span>
+            <a href="https://www.arxiv.org/abs/2509.01576" class="title" target="_blank">
+                Structured AI Decision-Making in Disaster Management
+            </a>
+        </div>
+        <div class="description">
+            Framework for implementing structured AI decision-making systems in emergency response and disaster management.
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Follow <a href="https://www.linkedin.com/company/aiworld_eu" target="_blank">@aiworld_eu</a> for more insights into how AI is shaping our world.</p>
+    </div>
+</body>
+</html>
