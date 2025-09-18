@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 880px;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #f0f2f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #1a365d;
+            background: white;
+            padding: 2px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .paper-card {
+            background: white;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .paper-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .paper-type {
+            background: #EDF2F7;
+            padding: 3px 6px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #4A5568;
+            white-space: nowrap;
+        }
+        .title {
+            color: #2d3748;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            flex: 1;
+        }
+        .title:hover {
+            color: #4299e1;
+        }
+        .description {
+            margin-top: 4px;
+            color: #4a5568;
+            line-height: 1.4;
+            font-size: 1.05em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer a {
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI World's 10 Notable Research Papers <br>#Week38</h1>
+    </div>
+
+    <!-- Paper 1 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-dna"></i> Evolution</span>
+            <a href="https://www.pnas.org/doi/10.1073/pnas.2509122122" class="title" target="_blank">
+                Could Humans and AI Become a New Evolutionary Individual?
+            </a>
+        </div>
+        <div class="description">
+            PNAS research proposing human-AI partnerships may constitute unprecedented evolutionary transitions.
+        </div>
+    </div>
+
+    <!-- Paper 2 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-chart-bar"></i> Market Analysis</span>
+            <a href="https://www.ai-supremacy.com/p/ai-reports-and-papers-that-matter-autumn-2025" class="title" target="_blank">
+                The Compute vs. ROI Paradox: 7 AI Reports Everyone's Ignoring
+            </a>
+        </div>
+        <div class="description">
+            Analysis revealing declining enterprise AI adoption despite massive investments and poor pilot performance.
+        </div>
+    </div>
+
+    <!-- Paper 3 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-shield-alt"></i> AI Safety</span>
+            <a href="https://static1.squarespace.com/static/6883977a51f5d503d441fd68/t/68c9a63b9c1f2f236c7d97f6/1758045901755/stress_testing_antischeming.pdf" class="title" target="_blank">
+                Stress Testing Deliberative Alignment for Anti-Scheming Training
+            </a>
+        </div>
+        <div class="description">
+            Apollo-OpenAI study on AI "scheming" shows reduced but not eliminated deceptive behaviors in models.
+        </div>
+    </div>
+
+    <!-- Paper 4 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-clock"></i> Long Horizon</span>
+            <a href="https://arxiv.org/pdf/2509.09677" class="title" target="_blank">
+                The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs
+            </a>
+        </div>
+        <div class="description">
+            Research showing small accuracy gains compound exponentially for long tasks, revealing self-conditioning effects.
+        </div>
+    </div>
+
+    <!-- Paper 5 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-heartbeat"></i> Medical AI</span>
+            <a href="https://www.nature.com/articles/s41586-025-09529-3" class="title" target="_blank">
+                Learning the Natural History of Human Disease with Generative Transformers
+            </a>
+        </div>
+        <div class="description">
+            Nature breakthrough: Delphi-2M predicts 1000+ diseases with 20-year health trajectory generation.
+        </div>
+    </div>
+
+    <!-- Paper 6 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-trophy"></i> Competition</span>
+            <a href="https://deepmind.google/discover/blog/gemini-achieves-gold-level-performance-at-the-international-collegiate-programming-contest-world-finals/" class="title" target="_blank">
+                Gemini Achieves Gold-Medal Level at ICPC World Finals
+            </a>
+        </div>
+        <div class="description">
+            Google's Gemini 2.5 Deep Think wins gold at programming's most prestigious competition.
+        </div>
+    </div>
+
+    <!-- Paper 7 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-robot"></i> Agentic AI</span>
+            <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/one-year-of-agentic-ai-six-lessons-from-the-people-doing-the-work" class="title" target="_blank">
+                One Year of Agentic AI: Six Lessons from the People Doing the Work
+            </a>
+        </div>
+        <div class="description">
+            McKinsey analysis of 50+ projects reveals implementation challenges and workflow reimagining needs.
+        </div>
+    </div>
+
+    <!-- Paper 8 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-search"></i> Detection</span>
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing" class="title" target="_blank">
+                Signs of AI Writing: Wikipedia's Detection Guide
+            </a>
+        </div>
+        <div class="description">
+            Community guide documenting AI writing patterns to identify undisclosed generated content.
+        </div>
+    </div>
+
+    <!-- Paper 9 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-child"></i> Teen Safety</span>
+            <a href="https://openai.com/index/teen-safety-freedom-and-privacy/" class="title" target="_blank">
+                Teen Safety, Freedom, and Privacy in AI Systems
+            </a>
+        </div>
+        <div class="description">
+            OpenAI framework balancing safety, privacy, and freedom with age-prediction and parental controls.
+        </div>
+    </div>
+
+    <!-- Paper 10 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-user-secret"></i> Cybercrime</span>
+            <a href="https://reliaquest.com/blog/threat-spotlight-cybercrime-is-hiring-recruiting-ai-iot-and-cloud-experts/" class="title" target="_blank">
+                Cybercrime Is Hiring: Recruiting AI, IoT, and Cloud Experts
+            </a>
+        </div>
+        <div class="description">
+            Dark web recruitment analysis shows professionalized cybercrime operations seeking AI automation experts.
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Follow <a href="https://www.linkedin.com/company/aiworld_eu" target="_blank">@aiworld_eu</a> for more insights into how AI is shaping our world.</p>
+    </div>
+</body>
+</html>
