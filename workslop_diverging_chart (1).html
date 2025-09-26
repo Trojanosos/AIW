@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workslop Net Change Impact</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin: 30px 0;
+        }
+        .source {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .source a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .source a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: auto;
+            opacity: 0.8;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .legend-color {
+            width: 20px;
+            height: 15px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI Workslop: Colleague Perception Impact</h1>
+            <div class="subtitle">Response Distribution by Professional Attribute</div>
+        </div>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #e74c3c;"></div>
+                <span>View as Less</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #27ae60;"></div>
+                <span>View as More</span>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="divergingChart"></canvas>
+        </div>
+        
+        <div class="source">
+            <em>Source: <a href="https://hbr.org/2025/09/ai-generated-workslop-is-destroying-productivity" target="_blank">AI-Generated "Workslop" Is Destroying Productivity</a></em>
+        </div>
+        
+        <img src="https://aiworld.eu/logo-transparent.svg" alt="AI World Logo" class="logo">
+    </div>
+
+    <script>
+        // Register the datalabels plugin
+        Chart.register(ChartDataLabels);
+        
+        const data = {
+            labels: ['Creative', 'Capable', 'Reliable', 'Trustworthy', 'Intelligent'],
+            datasets: [
+                {
+                    label: 'View as Less',
+                    data: [-54, -50, -49, -42, -37], // Negative values for left side
+                    backgroundColor: '#e74c3c',
+                    borderColor: '#c0392b',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                },
+                {
+                    label: 'View as More',
+                    data: [10, 12, 14, 11, 10], // Positive values for right side
+                    backgroundColor: '#27ae60',
+                    borderColor: '#229954',
+                    borderWidth: 2,
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }
+            ]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = Math.abs(context.parsed.x);
+                                const label = context.dataset.label;
+                                return `${label}: ${value}%`;
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255,255,255,0.2)',
+                        borderWidth: 1
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        color: 'white',
+                        font: {
+                            weight: 'bold',
+                            size: 13
+                        },
+                        formatter: function(value, context) {
+                            const absValue = Math.abs(value);
+                            return absValue > 0 ? absValue + '%' : '';
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        min: -60,
+                        max: 20,
+                        grid: {
+                            color: function(context) {
+                                return context.tick.value === 0 ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.1)';
+                            },
+                            drawBorder: false,
+                            lineWidth: function(context) {
+                                return context.tick.value === 0 ? 3 : 1;
+                            }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                if (value === 0) return '0';
+                                return Math.abs(value) + '%';
+                            },
+                            color: '#666',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Percentage of Respondents',
+                            color: '#2c3e50',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        position: 'bottom'
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#2c3e50',
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            }
+                        }
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderWidth: 2,
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 20,
+                        bottom: 20
+                    }
+                }
+            }
+        };
+
+        new Chart(document.getElementById('divergingChart'), config);
+    </script>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; font-style: italic; color: #555;">
+    </div>
+</body>
+</html>
