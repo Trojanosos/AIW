@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workslop Net Change Impact</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin: 30px 0;
+        }
+        .source {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-style: italic;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .source a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .source a:hover {
+            text-decoration: underline;
+        }
+        .logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: auto;
+            opacity: 0.8;
+        }
+        .insight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+        .insight-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            display: block;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI Workslop: Colleague Perception Impact</h1>
+            <div class="subtitle">Net Change in Professional Attributes</div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="netChangeChart"></canvas>
+        </div>
+        
+
+        
+        <div class="source">
+            <em>Source: <a href="https://hbr.org/2025/09/ai-generated-workslop-is-destroying-productivity" target="_blank">AI-Generated "Workslop" Is Destroying Productivity</a></em>
+        </div>
+        
+        <img src="https://aiworld.eu/logo-transparent.svg" alt="AI World Logo" class="logo">
+    </div>
+
+    <script>
+        // Register the datalabels plugin
+        Chart.register(ChartDataLabels);
+        
+        const palette = ["#8A817C","#EAB69F","#E07A5F","#8F5D5D","#3D405B","#5F797B","#81B29A","#F2CC8F"];
+        
+        const data = {
+            labels: ['Creative', 'Capable', 'Reliable', 'Trustworthy', 'Intelligent'],
+            datasets: [{
+                label: 'Net Change (%)',
+                data: [-44, -38, -35, -31, -27],
+                backgroundColor: palette.slice(0, 5),
+                borderColor: palette.slice(0, 5).map(color => {
+                    // Darken the border colors slightly
+                    return color.replace(/[0-9A-F]/g, match => 
+                        Math.max(0, parseInt(match, 16) - 2).toString(16).padStart(1, '0')
+                    );
+                }),
+                borderWidth: 2,
+                borderRadius: 6,
+                borderSkipped: false,
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Net Change: ${context.parsed.x}%`;
+                            }
+                        },
+                        backgroundColor: 'rgba(0,0,0,0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255,255,255,0.2)',
+                        borderWidth: 1
+                    },
+                    datalabels: {
+                        anchor: 'center',
+                        align: 'center',
+                        color: 'white',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        formatter: function(value) {
+                            return value + '%';
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        min: -50,
+                        max: 50,
+                        grid: {
+                            color: function(context) {
+                                return context.tick.value === 0 ? 'rgba(0,0,0,0.8)' : 'rgba(0,0,0,0.1)';
+                            },
+                            drawBorder: false,
+                            lineWidth: function(context) {
+                                return context.tick.value === 0 ? 3 : 1;
+                            }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                if (value === 0) return '0';
+                                return (value > 0 ? '+' : '') + value + '%';
+                            },
+                            color: '#666',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Net Change',
+                            color: '#2c3e50',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        position: 'bottom'
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#2c3e50',
+                            font: {
+                                size: 12,
+                                weight: '600'
+                            }
+                        }
+                    }
+                },
+                elements: {
+                    bar: {
+                        borderWidth: 2,
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: 20,
+                        bottom: 20
+                    }
+                }
+            }
+        };
+
+        new Chart(document.getElementById('netChangeChart'), config);
+    </script>
+    
+    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; font-style: italic; color: #555;">
+    </div>
+</body>
+</html>
