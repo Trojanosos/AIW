@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #f0f2f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #1a365d;
+            background: white;
+            padding: 2px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .paper-card {
+            background: white;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .paper-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .paper-type {
+            background: #EDF2F7;
+            padding: 3px 6px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #4A5568;
+            white-space: nowrap;
+        }
+        .title {
+            color: #2d3748;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            flex: 1;
+        }
+        .title:hover {
+            color: #4299e1;
+        }
+        .description {
+            margin-top: 4px;
+            color: #4a5568;
+            line-height: 1.4;
+            font-size: 1.05em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer a {
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI World's 10 Notable Research Papers <br>#Week40</h1>
+    </div>
+
+    <!-- Paper 1 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-rocket"></i> Model Release</span>
+            <a href="https://www.anthropic.com/claude/sonnet" class="title" target="_blank">
+                Introducing Claude Sonnet 4.5
+            </a>
+        </div>
+        <div class="description">
+            Latest frontier model with significant improvements in reasoning, mathematics and computer usage, achieving state-of-the-art results on SWE-bench Verified and OSWorld.
+        </div>
+    </div>
+
+    <!-- Paper 2 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-brain"></i> Training Methods</span>
+            <a href="#" class="title" target="_blank">
+                Language Models that Think, Chat Better
+            </a>
+        </div>
+        <div class="description">
+            Preprint revolutionizing LLM training by introducing RLMT methodology that forces extended reasoning (CoT), improving chat and general reasoning capabilities.
+        </div>
+    </div>
+
+    <!-- Paper 3 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-balance-scale"></i> Bias Detection</span>
+            <a href="#" class="title" target="_blank">
+                Who's Your Judge? On the Detectability of LLM-Generated Judgments
+            </a>
+        </div>
+        <div class="description">
+            Preprint formalizing judgment detection task and introducing J-Detector, a lightweight neural detector for identifying and interpreting LLM-generated judgments.
+        </div>
+    </div>
+
+    <!-- Paper 4 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-code"></i> Code Training</span>
+            <a href="#" class="title" target="_blank">
+                Verification Limits Code LLM Training
+            </a>
+        </div>
+        <div class="description">
+            Study identifying verification ceiling as main bottleneck limiting quality and diversity of code LLM training data due to synthetic verifier rigidity.
+        </div>
+    </div>
+
+    <!-- Paper 5 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-cogs"></i> Context Engineering</span>
+            <a href="#" class="title" target="_blank">
+                Effective Context Engineering for AI Agents
+            </a>
+        </div>
+        <div class="description">
+            Anthropic introduces context engineering evolution optimizing limited LLM context, with advanced strategies for maintaining consistency beyond context windows.
+        </div>
+    </div>
+
+    <!-- Paper 6 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-atom"></i> Quantum Materials</span>
+            <a href="#" class="title" target="_blank">
+                Structural Constraint Integration in Generative Model for Quantum Materials
+            </a>
+        </div>
+        <div class="description">
+            Nature study introducing SCIGEN, a diffusion-based generative model integrating geometric constraints for quantum material discovery.
+        </div>
+    </div>
+
+    <!-- Paper 7 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-crystal-ball"></i> Strategic Foresight</span>
+            <a href="#" class="title" target="_blank">
+                Advanced AI: Possible Futures
+            </a>
+        </div>
+        <div class="description">
+            CFG report exploring five scenarios for advanced AI transition, crossing capability growth speed with development concentration.
+        </div>
+    </div>
+
+    <!-- Paper 8 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-flask"></i> Lab Automation</span>
+            <a href="#" class="title" target="_blank">
+                Multimodal Robotic Platform for Multi-Element Electrocatalyst Discovery
+            </a>
+        </div>
+        <div class="description">
+            Nature paper introducing CRESt system fusing multimodal AI with Bayesian optimization and robotic automation for experimental research.
+        </div>
+    </div>
+
+    <!-- Paper 9 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-book"></i> Education AI</span>
+            <a href="#" class="title" target="_blank">
+                Towards an AI-Augmented Textbook
+            </a>
+        </div>
+        <div class="description">
+            Learn Your Way approach overcoming one-size-fits-all textbook limitations with layers of multiple representations and personalization.
+        </div>
+    </div>
+
+    <!-- Paper 10 -->
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-robot"></i> Robotics Foundation</span>
+            <a href="https://rdt-robotics.github.io/rdt2/" class="title" target="_blank">
+                RDT2: Zero-Shot Cross-Embodiment Generalization by Scaling Up UMI Data
+            </a>
+        </div>
+        <div class="description">
+            First robotics foundation model enabling zero-shot cross-embodiment generalization through 10,000+ hours UMI data collection, VLA pretraining, and diffusion distillation.
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Follow <a href="https://www.linkedin.com/company/aiworld_eu" target="_blank">@aiworld_eu</a> for more insights into how AI is shaping our world.</p>
+    </div>
+</body>
+</html>
