@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 5px;
+            background-color: #f0f2f5;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #1a365d;
+            background: white;
+            padding: 2px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .paper-card {
+            background: white;
+            border-radius: 5px;
+            padding: 5px;
+            margin-bottom: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+        }
+        .paper-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .paper-type {
+            background: #EDF2F7;
+            padding: 3px 6px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            color: #4A5568;
+            white-space: nowrap;
+        }
+        .title {
+            color: #2d3748;
+            font-size: 1em;
+            font-weight: bold;
+            text-decoration: none;
+            flex: 1;
+        }
+        .title:hover {
+            color: #4299e1;
+        }
+        .description {
+            margin-top: 2px;
+            color: #4a5568;
+            line-height: 1.2;
+            font-size: 0.9em;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .footer a {
+            color: #4299e1;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>AI World's 10 Notable Research Papers <br>#Week43</h1>
+    </div>
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-brain"></i> AI Psychology</span>
+            <a href="https://arxiv.org/abs/2510.06222" class="title" target="_blank">
+                Inducing State Anxiety in LLM Agents Reproduces Human-Like Biases
+            </a>
+        </div>
+        <div class="description">
+            LLM agents exposed to stress show human-like emotional biases in consumer decisions
+        </div>
+    </div>
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-exclamation-triangle"></i> AI Safety</span>
+            <a href="https://arxiv.org/abs/2510.18003" class="title" target="_blank">
+                BadScientist: Can Research Agents Write Convincing but Unsound Papers?
+            </a>
+        </div>
+        <div class="description">
+            AI-generated fake papers achieved 82% acceptance from LLM reviewers despite integrity issues
+        </div>
+    </div>
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-users"></i> Social Impact</span>
+            <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5560401" class="title" target="_blank">
+                Performance or Principle: Resistance to AI in the U.S. Labor Market
+            </a>
+        </div>
+        <div class="description">
+            Americans reject AI automation in empathy-based fields despite accepting efficiency gains
+        </div>
+    </div>
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-user-shield"></i> Privacy</span>
+            <a href="https://arxiv.org/abs/2509.05382" class="title" target="_blank">
+                User Privacy and LLMs: Analysis of Frontier Developers' Privacy Policies
+            </a>
+        </div>
+        <div class="description">
+            Six major AI companies train on user chat data by default with limited disclosure
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-robot"></i> AI Agents</span>
+            <a href="https://arxiv.org/abs/2510.11701" class="title" target="_blank">
+                Demystifying Reinforcement Learning in Agentic Reasoning
+            </a>
+        </div>
+        <div class="description">
+            Exploration-friendly techniques enable smaller models to rival larger ones in reasoning tasks
+        </div>
+    </div>
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-code"></i> Software Engineering</span>
+            <a href="https://machinelearning.apple.com/research/software-defect-prediction" class="title" target="_blank">
+                Software Defect Prediction using Autoencoder Transformer Model
+            </a>
+        </div>
+        <div class="description">
+            Quantum-classical hybrid AI model achieves 98.08% accuracy in defect prediction
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-chart-line"></i> Web Analytics</span>
+            <a href="https://diff.wikimedia.org/2025/10/17/new-user-trends-on-wikipedia/" class="title" target="_blank">
+                New User Trends on Wikipedia: AI's Impact on Web Traffic
+            </a>
+        </div>
+        <div class="description">
+            Wikipedia traffic declined 8% as AI search engines provide direct answers without attribution
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-user-secret"></i> Academic Integrity</span>
+            <a href="https://www.nature.com/articles/d41586-025-03341-9" class="title" target="_blank">
+                How to Spot Fake Scientists and Stop Them from Publishing Papers
+            </a>
+        </div>
+        <div class="description">
+            Paper mills created 26 fake scientists who published 55 fraudulent papers across journals
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-thinking"></i> Philosophy</span>
+            <a href="https://www.theguardian.com/commentisfree/2025/oct/18/critical-thinking-is-one-of-the-most-important-aspects-of-being-human-according-to-stoicism-so-why-are-we-handing-it-over-to-a-machine" class="title" target="_blank">
+                Critical Thinking and AI: A Stoic Perspective on Human Autonomy
+            </a>
+        </div>
+        <div class="description">
+            Stoic philosophy warns against delegating critical thinking to AI systems
+        </div>
+    </div>
+
+    <div class="paper-card">
+        <div class="title-container">
+            <span class="paper-type"><i class="fas fa-building"></i> Corporate AI</span>
+            <a href="https://www.bitkom.org/Presse/Presseinformation/Beschaeftigte-nutzen-Schatten-KI" class="title" target="_blank">
+                Shadow AI in German Workplaces: Unauthorized AI Tool Use
+            </a>
+        </div>
+        <div class="description">
+            42% of German companies report employees using unauthorized AI tools for work tasks
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Follow <a href="https://www.linkedin.com/company/aiworld_eu" target="_blank">@aiworld_eu</a> for more insights into how AI is shaping our world.</p>
+    </div>
+</body>
+</html>
