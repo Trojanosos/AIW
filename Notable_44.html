@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Zigzag AI Timeline (Final Flat End)</title>
+<style>
+  :root{
+    /* Layout controls */
+    --gutter-right: 30px;
+    --gutter-bottom: 0px;   /* reduced bottom space */
+    --gutter-left: 30px;
+    /* Visuals */
+    --icon: 90px;
+    --icon-border: 1.5px;
+    --tile-h: 145px;
+    --pad-left: 10px;
+    --pad-right: 10px;
+    --line: #5B9FD8;
+
+    /* Row centers */
+    --y1: 72.5px;
+    --y2: 217.5px;
+    --y3: 362.5px;
+    --y4: 507.5px;
+    --y5: 652.5px;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    background:#f5f5f5;
+    margin:0;
+    padding:0px 0px;
+  }
+
+  .container{
+    position:relative;
+    max-width:900px;
+    margin:0 auto;
+    background:#fff;
+    padding: 0px var(--gutter-right) calc(5px + var(--gutter-bottom)) var(--gutter-left);
+    border-radius:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .timeline{
+    position:relative;
+    height:880px; /* slightly shorter since curve removed */
+  }
+
+  .zigzag-line{
+    position:absolute;
+    inset:0;
+    width:100%; height:100%;
+    z-index:3;
+    pointer-events:none;
+  }
+
+  .tile{
+    position:absolute;
+    left:0; width:100%;
+    height:var(--tile-h);
+    display:flex; align-items:center;
+    transform:translate(var(--x-nudge,0px), var(--y-nudge,70px));
+  }
+  .row-1{ top:calc(var(--y1) - var(--tile-h)/2); }
+  .row-2{ top:calc(var(--y2) - var(--tile-h)/2); }
+  .row-3{ top:calc(var(--y3) - var(--tile-h)/2); }
+  .row-4{ top:calc(var(--y4) - var(--tile-h)/2); }
+  .row-5{ top:calc(var(--y5) - var(--tile-h)/2); }
+
+  .right{ justify-content:flex-end; padding-left:var(--pad-left); }
+  .left { justify-content:flex-start; padding-right:var(--pad-right); }
+
+  .article-card{
+    display:flex; align-items:center; gap:20px;
+    text-decoration:none; color:inherit;
+    padding:18px 20px; max-width:780px; width:100%;
+    border-radius:12px; background:#fff;
+    box-shadow:0 2px 7px rgba(0,0,0,0.03);
+    transition:0.25s ease; z-index:2;
+  }
+  .article-card:hover{
+    background:#f0f6ff;
+    box-shadow:0 2px 10px rgba(91,159,216,0.15);
+  }
+
+  .icon{
+    width:var(--icon); height:var(--icon); min-width:var(--icon);
+    border-radius:50%;
+    border:var(--icon-border) solid var(--line);
+    background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    z-index:4; flex-shrink:0;
+  }
+  .icon img{ width:80%; height:80%; display:block; }
+
+  .content{ flex:1; }
+  .title{
+    color:var(--line); font-size:19px; font-weight:600;
+    margin:0 0 8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .description{ color:#444; font-size:15px; margin:0; line-height:1.4; }
+
+  .aiworld-logo{
+    position:absolute; right:16px; bottom:16px; width:82px; opacity:.9;
+  }
+
+  @media (max-width:720px){
+    .container{ padding:26px calc(16px + var(--gutter-right)/2) calc(46px + var(--gutter-bottom)) 16px; }
+    .right,.left{ justify-content:flex-start; padding:0 0 0 80px; }
+    .timeline{ height:1020px; }
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="timeline">
+      <!-- Zigzag path with flat bottom end -->
+      <svg class="zigzag-line" viewBox="0 0 800 880" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 750 72.5
+                 L 50 72.5
+                 Q 35 72.5 35 87.5
+                 L 35 202.5
+                 Q 35 217.5 50 217.5
+                 L 750 217.5
+                 Q 765 217.5 765 232.5
+                 L 765 347.5
+                 Q 765 362.5 750 362.5
+                 L 50 362.5
+                 Q 35 362.5 35 377.5
+                 L 35 492.5
+                 Q 35 507.5 50 507.5
+                 L 750 507.5
+                 Q 765 507.5 765 522.5
+                 L 765 637.5
+                 Q 765 652.5 750 652.5
+                 L 50 652.5
+                 Q 35 652.5 35 667.5
+                 L 35 782.5
+                 Q 35 797.5 50 797.5
+                 L 750 797.5"
+              stroke="var(--line)"
+              stroke-width="3.5"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"/>
+      </svg>
+
+      <!-- 1 -->
+      <div class="tile right row-1" style="--x-nudge:25px;">
+        <a href="https://www.bbc.co.uk/mediacentre/documents/news-integrity-in-ai-assistants-report.pdf" class="article-card">
+          <div class="content">
+            <h3 class="title">When AI assistants get the news wrong: a risk to public trust</h3>
+            <p class="description">BBC & EBU tested 4 assistants on 3,000 current-affairs Qs in 18 countries; 45% had major errors and 31% misattributed sources — prompting calls for transparency regulation.</p>
+          </div>
+          <div class="icon"><img src="https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/outline/newspaper.svg" alt=""></div>
+        </a>
+      </div>
+
+      <!-- 2 -->
+      <div class="tile left row-2" style="--x-nudge:-25px;">
+        <a href="https://arxiv.org/abs/2510.19808" class="article-card">
+          <div class="icon"><img src="https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/outline/photo.svg" alt=""></div>
+          <div class="content">
+            <h3 class="title">Pico-Banana-400K: building better image editing through quality data</h3>
+            <p class="description">400K real-photo edit examples, 35 edit types, 72K multi-turn sequences and 56K preference pairs; global edits >90% success, spatial/text edits still ~59%.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- 3 -->
+      <div class="tile right row-3" style="--x-nudge:25px;">
+        <a href="https://arxiv.org/abs/2510.13928" class="article-card">
+          <div class="content">
+            <h3 class="title">LLMs can get “Brain Rot”: how junk data causes lasting cognitive decline</h3>
+            <p class="description">Training on low-quality social media cut reasoning (ARC 74.9→57.2) and long-context skills (RULER 84.4→52.3); models began “thought-skipping” and damage persisted even after clean tuning.</p>
+          </div>
+          <div class="icon"><img src="https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/outline/exclamation-circle.svg" alt=""></div>
+        </a>
+      </div>
+
+      <!-- 4 -->
+      <div class="tile left row-4" style="--x-nudge:-25px;">
+        <a href="https://openai.com/index/strengthening-chatgpt-responses-in-sensitive-conversations/" class="article-card">
+          <div class="icon"><img src="https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/outline/heart.svg" alt=""></div>
+          <div class="content">
+            <h3 class="title">ChatGPT recognizes pain: when AI becomes more attentive to emotions</h3>
+            <p class="description">GPT-5 now routes sensitive mental-health talks to stronger chains; non-compliant replies fell by 65–80% and crisis-scenario compliance rose to ~92% after work with 170+ clinicians.</p>
+          </div>
+        </a>
+      </div>
+
+      <!-- 5 -->
+      <div class="tile right row-5" style="--x-nudge:25px;">
+        <a href="https://arxiv.org/abs/2510.07686" class="article-card">
+          <div class="content">
+            <h3 class="title">Behind the face of AI: when specifications reveal contradictions in LLMs</h3>
+            <p class="description">Stress-testing 12 model specs exposed conflicting moral rules and provider-specific “personalities,” underscoring the need for more consistent, interpretable guardrails.</p>
+          </div>
+          <div class="icon"><img src="https://cdn.jsdelivr.net/npm/heroicons@2.1.5/24/outline/cpu-chip.svg" alt=""></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- AI World logo inside container -->
+    <img class="aiworld-logo" src="https://aiworld.eu/logo-transparent.svg" alt="AI World logo" />
+  </div>
+</body>
+</html>
